@@ -225,7 +225,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[67]:</div>
+<div class="prompt input_prompt">In&nbsp;[164]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Import libraries</span>
@@ -277,14 +277,14 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[68]:</div>
+<div class="prompt input_prompt">In&nbsp;[217]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Calculate number of students</span>
 <span class="n">n_students</span> <span class="o">=</span> <span class="n">student_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="c1"># TODO: Calculate number of features</span>
-<span class="n">n_features</span> <span class="o">=</span> <span class="n">student_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">n_features</span> <span class="o">=</span> <span class="n">student_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
 
 <span class="c1"># TODO: Calculate passing students</span>
 <span class="n">num_passing</span> <span class="o">=</span> <span class="mi">0</span>
@@ -301,7 +301,7 @@ div#notebook {
 <span class="n">n_failed</span> <span class="o">=</span> <span class="n">num_failing</span>
 
 <span class="c1"># TODO: Calculate graduation rate</span>
-<span class="n">grad_rate</span> <span class="o">=</span> <span class="n">n_passed</span> <span class="o">/</span> <span class="n">n_students</span>
+<span class="n">grad_rate</span> <span class="o">=</span> <span class="n">n_passed</span> <span class="o">/</span> <span class="n">n_students</span> <span class="o">*</span> <span class="mi">100</span>
 
 <span class="c1"># Print the results</span>
 <span class="k">print</span> <span class="s2">&quot;Total number of students: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n_students</span><span class="p">)</span>
@@ -322,10 +322,10 @@ div#notebook {
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Total number of students: 395
-Number of features: 31
+Number of features: 30
 Number of students who passed: 265.0
 Number of students who failed: 130.0
-Graduation rate of the class: 0.67%
+Graduation rate of the class: 67.09%
 </pre>
 </div>
 </div>
@@ -348,7 +348,7 @@ Graduation rate of the class: 0.67%
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[69]:</div>
+<div class="prompt input_prompt">In&nbsp;[218]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Extract feature columns</span>
@@ -430,7 +430,7 @@ Feature values:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[70]:</div>
+<div class="prompt input_prompt">In&nbsp;[219]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">preprocess_features</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
@@ -501,11 +501,11 @@ Feature values:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[71]:</div>
+<div class="prompt input_prompt">In&nbsp;[227]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import any additional functionality you may need here</span>
-<span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">StratifiedShuffleSplit</span>
 
 <span class="c1"># TODO: Set the number of training points</span>
 <span class="n">num_train</span> <span class="o">=</span> <span class="mi">300</span>
@@ -514,8 +514,15 @@ Feature values:
 <span class="n">num_test</span> <span class="o">=</span> <span class="n">X_all</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">num_train</span>
 
 <span class="c1"># TODO: Shuffle and split the dataset into the number of training and testing points above</span>
-<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X_all</span><span class="p">,</span> <span class="n">y_all</span><span class="p">,</span> <span class="n">train_size</span> <span class="o">=</span> <span class="n">num_train</span><span class="p">,</span> 
-                                                    <span class="n">test_size</span> <span class="o">=</span> <span class="n">num_test</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Stratified Split of train and test data</span>
+<span class="n">sss</span> <span class="o">=</span> <span class="n">StratifiedShuffleSplit</span><span class="p">(</span><span class="n">y_all</span><span class="p">,</span> <span class="n">n_iter</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">train_size</span> <span class="o">=</span> <span class="n">num_train</span><span class="p">,</span> 
+                             <span class="n">test_size</span> <span class="o">=</span> <span class="n">num_test</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span> <span class="ow">in</span> <span class="n">sss</span><span class="p">:</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="o">=</span> <span class="n">X_all</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">X_all</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span>
+    <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">y_all</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">train_index</span><span class="p">],</span> <span class="n">y_all</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span>
+
 
 <span class="c1"># Show the results of the split</span>
 <span class="k">print</span> <span class="s2">&quot;Training set has {} samples.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -567,18 +574,39 @@ Testing set has 95 samples.
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer: </strong>Gaussian Naive Bayes, Support Vector Classification with kernel,  k-Nearest Neighbors .</p>
+<p><strong>Answer: </strong>Gaussian Naive Bayes, Support Vector Machines, k-Nearest Neighbors.</p>
+<p>The general applications of each model:</p>
+<ul>
+<li>Naive Bayes classifier: text classification, medical diagnosis, systems performance management.</li>
+<li>Support Vector Machines: image classification, hand-written character recognition, cancer classification.</li>
+<li>k-Nearest Neighbors: text categorization, image classification, predicting economic events.</li>
+</ul>
+<p>Their strengths and weaknesses:</p>
+<ul>
+<li><p>Naive Bayes classifier:</p>
+<ul>
+<li>Advantage: greatly simplify learning by assuming each distribution can be independently estimated as a one dimensional distribution; it can avoid the effects of the curse of dimensionality. </li>
+<li>Disadvantage: sensitive to the local structure of the data.</li>
+</ul>
+</li>
+<li><p>Support Vector Machines:</p>
+<ul>
+<li>Advantage: effective in high dimensional spaces; still effective in cases where number of dimensions is greater than the number of samples; uses a subset of training points in the decision function (called support vectors), so it is also memory efficient.</li>
+<li>Disadvantage: it is sensitive to noise and only considers two classes; SVMs do not directly provide probability estimates, these are calculated using an expensive five-fold cross-validation</li>
+</ul>
+</li>
+<li><p>kNN:</p>
+<ul>
+<li>Advantage: KNNs don't train and store a specific model, they classify data by directly dividing the data into the classes in the feature space, they are effective if the training data is large.</li>
+<li>Disadvantage: this algorithm must compute the distance and sort all the training data at each prediction, it is sensitive to the local structure of the data.</li>
+</ul>
+</li>
+</ul>
 <p>With limited resources and budgets, I need find the most effective model with the least amount of computation costs. In addition, there are many features to be considered with scanning the students data. So the reason of these three models are selected:</p>
 <ul>
 <li>Naive Bayes classifiers can be extremely fast with a simplified assumptions of each distribution can be independently estimated as a one dimensional distribution. </li>
 <li>SVC are effective in high dimensional spaces with the kernel trick. It is also memory efficient.</li>
 <li>k-NN is a type of instance-based learning, the object is only approximated classified by a majority vote of its k nearest neighbors, it can avoid the effects of the curse of dimensionality.</li>
-</ul>
-<p>What are their strengths and weaknesses?</p>
-<ul>
-<li>k-NN is one of the simplest of all machine learning algorithms and it can avoid the effects of the curse of dimensionality. But it is sensitive to the local structure of the data.</li>
-<li>With the kernel trick, SVC are effective in high dimensional spaces and still effective in cases where number of dimensions is greater than the number of samples. It uses a subset of training points in the decision function (called support vectors), so it is also memory efficient. But SVC cannot directly provide probability estimates, these are calculated using an expensive five-fold cross-validation. If the number of features is much greater than the number of samples, the method is likely to give poor performances. It requires full labeling of input data and is only directly applicable for two-class tasks. </li>
-<li>In spite of their apparently over-simplified assumptions, naive Bayes classifiers have worked quite well in many real-world situations, famously document classification and spam filtering. They require a small amount of training data to estimate the necessary parameters. It can be extremely fast compared to more sophisticated methods. The decoupling of the class conditional feature distributions means that each distribution can be independently estimated as a one dimensional distribution. This in turn helps to alleviate problems stemming from the curse of dimensionality. On the flip side, although naive Bayes is known as a decent classifier, it is known to be a bad estimator, so the probability outputs are not to be taken too seriously.</li>
 </ul>
 
 </div>
@@ -604,7 +632,7 @@ Testing set has 95 samples.
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[72]:</div>
+<div class="prompt input_prompt">In&nbsp;[221]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">train_classifier</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">):</span>
@@ -677,7 +705,7 @@ Testing set has 95 samples.
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[156]:</div>
+<div class="prompt input_prompt">In&nbsp;[222]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import the three supervised learning models from sklearn</span>
@@ -731,59 +759,59 @@ Testing set has 95 samples.
 <pre>Training a GaussianNB using a training set size of 100. . .
 Trained model in 0.0010 seconds
 Made predictions in 0.0000 seconds.
-F1 score for training set: 0.8467.
-Made predictions in 0.0010 seconds.
-F1 score for test set: 0.8029.
+F1 score for training set: 0.8182.
+Made predictions in 0.0000 seconds.
+F1 score for test set: 0.8031.
 Training a GaussianNB using a training set size of 200. . .
 Trained model in 0.0010 seconds
 Made predictions in 0.0000 seconds.
-F1 score for training set: 0.8406.
+F1 score for training set: 0.8000.
 Made predictions in 0.0000 seconds.
-F1 score for test set: 0.7244.
+F1 score for test set: 0.8120.
 Training a GaussianNB using a training set size of 300. . .
-Trained model in 0.0000 seconds
+Trained model in 0.0010 seconds
 Made predictions in 0.0010 seconds.
-F1 score for training set: 0.8038.
-Made predictions in 0.0010 seconds.
-F1 score for test set: 0.7634.
+F1 score for training set: 0.7952.
+Made predictions in 0.0000 seconds.
+F1 score for test set: 0.7910.
 ------------------------------------------------------
 Training a SVC using a training set size of 100. . .
-Trained model in 0.0020 seconds
+Trained model in 0.0010 seconds
 Made predictions in 0.0010 seconds.
-F1 score for training set: 0.8777.
+F1 score for training set: 0.8533.
 Made predictions in 0.0000 seconds.
-F1 score for test set: 0.7746.
+F1 score for test set: 0.8025.
 Training a SVC using a training set size of 200. . .
-Trained model in 0.0040 seconds
+Trained model in 0.0030 seconds
 Made predictions in 0.0020 seconds.
-F1 score for training set: 0.8679.
+F1 score for training set: 0.8630.
 Made predictions in 0.0010 seconds.
-F1 score for test set: 0.7815.
+F1 score for test set: 0.7887.
 Training a SVC using a training set size of 300. . .
-Trained model in 0.0060 seconds
+Trained model in 0.0050 seconds
 Made predictions in 0.0040 seconds.
-F1 score for training set: 0.8761.
+F1 score for training set: 0.8627.
 Made predictions in 0.0010 seconds.
-F1 score for test set: 0.7838.
+F1 score for test set: 0.8212.
 ------------------------------------------------------
 Training a KNeighborsClassifier using a training set size of 100. . .
-Trained model in 0.0000 seconds
+Trained model in 0.0010 seconds
 Made predictions in 0.0010 seconds.
-F1 score for training set: 0.8060.
+F1 score for training set: 0.8378.
 Made predictions in 0.0010 seconds.
-F1 score for test set: 0.7246.
+F1 score for test set: 0.7153.
 Training a KNeighborsClassifier using a training set size of 200. . .
-Trained model in 0.0000 seconds
-Made predictions in 0.0030 seconds.
-F1 score for training set: 0.8800.
-Made predictions in 0.0010 seconds.
-F1 score for test set: 0.7692.
-Training a KNeighborsClassifier using a training set size of 300. . .
-Trained model in 0.0000 seconds
-Made predictions in 0.0050 seconds.
-F1 score for training set: 0.8809.
+Trained model in 0.0010 seconds
 Made predictions in 0.0020 seconds.
-F1 score for test set: 0.7801.
+F1 score for training set: 0.8159.
+Made predictions in 0.0010 seconds.
+F1 score for test set: 0.7040.
+Training a KNeighborsClassifier using a training set size of 300. . .
+Trained model in 0.0010 seconds
+Made predictions in 0.0070 seconds.
+F1 score for training set: 0.8489.
+Made predictions in 0.0030 seconds.
+F1 score for test set: 0.7914.
 </pre>
 </div>
 </div>
@@ -821,23 +849,23 @@ F1 score for test set: 0.7801.
 <tr>
 <td style="text-align:center">100</td>
 <td style="text-align:center">0.0000 seconds</td>
-<td style="text-align:center">0.0010 seconds</td>
-<td style="text-align:center">0.8467</td>
-<td style="text-align:center">0.8029</td>
+<td style="text-align:center">0.0000 seconds</td>
+<td style="text-align:center">0.8182</td>
+<td style="text-align:center">0.8031</td>
 </tr>
 <tr>
 <td style="text-align:center">200</td>
 <td style="text-align:center">0.0000 seconds</td>
 <td style="text-align:center">0.0000 seconds</td>
-<td style="text-align:center">0.8406</td>
-<td style="text-align:center">0.7244</td>
+<td style="text-align:center">0.8000</td>
+<td style="text-align:center">0.8120</td>
 </tr>
 <tr>
 <td style="text-align:center">300</td>
 <td style="text-align:center">0.0010 seconds</td>
-<td style="text-align:center">0.0010 seconds</td>
-<td style="text-align:center">0.8038</td>
-<td style="text-align:center">0.7634</td>
+<td style="text-align:center">0.0000 seconds</td>
+<td style="text-align:center">0.7952</td>
+<td style="text-align:center">0.7910</td>
 </tr>
 </tbody>
 </table>
@@ -856,22 +884,22 @@ F1 score for test set: 0.7801.
 <td style="text-align:center">100</td>
 <td style="text-align:center">0.0010 seconds</td>
 <td style="text-align:center">0.0000 seconds</td>
-<td style="text-align:center">0.8777</td>
-<td style="text-align:center">0.7746</td>
+<td style="text-align:center">0.8533</td>
+<td style="text-align:center">0.8025</td>
 </tr>
 <tr>
 <td style="text-align:center">200</td>
 <td style="text-align:center">0.0020 seconds</td>
 <td style="text-align:center">0.0010 seconds</td>
-<td style="text-align:center">0.8679</td>
-<td style="text-align:center">0.7815</td>
+<td style="text-align:center">0.8630</td>
+<td style="text-align:center">0.7887</td>
 </tr>
 <tr>
 <td style="text-align:center">300</td>
 <td style="text-align:center">0.0040 seconds</td>
 <td style="text-align:center">0.0010 seconds</td>
-<td style="text-align:center">0.8761</td>
-<td style="text-align:center">0.7838</td>
+<td style="text-align:center">0.8627</td>
+<td style="text-align:center">0.8212</td>
 </tr>
 </tbody>
 </table>
@@ -890,22 +918,22 @@ F1 score for test set: 0.7801.
 <td style="text-align:center">100</td>
 <td style="text-align:center">0.0010 seconds</td>
 <td style="text-align:center">0.0010 seconds</td>
-<td style="text-align:center">0.8060</td>
-<td style="text-align:center">0.7246</td>
+<td style="text-align:center">0.8378</td>
+<td style="text-align:center">0.7153</td>
 </tr>
 <tr>
 <td style="text-align:center">200</td>
-<td style="text-align:center">0.0030 seconds</td>
+<td style="text-align:center">0.0020 seconds</td>
 <td style="text-align:center">0.0010 seconds</td>
-<td style="text-align:center">0.8800</td>
-<td style="text-align:center">0.7692</td>
+<td style="text-align:center">0.8159</td>
+<td style="text-align:center">0.7040</td>
 </tr>
 <tr>
 <td style="text-align:center">300</td>
-<td style="text-align:center">0.0050 seconds</td>
-<td style="text-align:center">0.0020 seconds</td>
-<td style="text-align:center">0.8809</td>
-<td style="text-align:center">0.7801</td>
+<td style="text-align:center">0.0070 seconds</td>
+<td style="text-align:center">0.0030 seconds</td>
+<td style="text-align:center">0.8489</td>
+<td style="text-align:center">0.7914</td>
 </tr>
 </tbody>
 </table>
@@ -938,7 +966,7 @@ F1 score for test set: 0.7801.
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer: </strong> Support Vector Classification are chosen as the best model. Based on the computation resorce and F1 score, we can found that GaussianNB has a minimum conputation time but a worst prediction score. K-NN has a maximum computation time and a middle prediction score. SVC has a middle computation time and a best F1 score. So if the budget allows, the SVC is the best choice.</p>
+<p><strong>Answer: </strong> Support Vector Classification are chosen as the best model. Based on the computation resorce and F1 score, we can found that GaussianNB has a minimum conputation time but a worst training score. The computation time of K-NN is increased exponentially, and it has a middle prediction score. SVC has a middle computation time and a best F1 score. So if the budget allows, the SVC is the best choice.</p>
 
 </div>
 </div>
@@ -958,7 +986,10 @@ F1 score for test set: 0.7801.
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer: </strong>The chosen model is support vector machine. This prediction model can consider all of students' features in a efficient way, which can make a higher prediction accuracy for whether the student intervention need or not. The Kernel functions, which is used in SVC, is also possible to specify custom kernels. This is an advantage for more features added in the dataset in the furture.</p>
+<p><strong>Answer: </strong>The chosen model is support vector machines. This prediction model can consider all of students' features in a efficient way, which can make a higher prediction accuracy for whether the student intervention need or not.</p>
+<p>This model involves finding the hyperplane that best separates the passing students and failing students with the maximum margin. But the features in this prediction are not distributed regularly in two part, so there is no way to draw a straight line to separate them. you have to draw a squiggly line. However, with the kernel function, one advanage of this model chosen, the labels (students passing or failing) can be separated much easier in a high dimensional.the margin is maximized subject to the constraint that it perfectly classifies the data. It is also possible to add more features in the dataset in the furture.</p>
+<p><img src = "https://qph.is.quoracdn.net/main-qimg-312b52d9d056499a3c8893e22f6fee5e?convert_to_webp=true"><br>
+<img src = "https://qph.is.quoracdn.net/main-qimg-cd6cde306c8273b2af183f57f25c259d?convert_to_webp=true"></p>
 
 </div>
 </div>
@@ -989,17 +1020,18 @@ F1 score for test set: 0.7801.
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[153]:</div>
+<div class="prompt input_prompt">In&nbsp;[226]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Import &#39;gridSearchCV&#39; and &#39;make_scorer&#39;</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">make_scorer</span>
+<span class="kn">from</span> <span class="nn">sklearn.grid_search</span> <span class="kn">import</span> <span class="n">GridSearchCV</span>
 
 <span class="c1"># TODO: Create the parameters list you wish to tune</span>
 <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;kernel&#39;</span><span class="p">:(</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="s1">&#39;sigmoid&#39;</span><span class="p">,</span> <span class="s1">&#39;poly&#39;</span><span class="p">),</span> 
-              <span class="s1">&#39;C&#39;</span><span class="p">:[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.07</span><span class="p">,</span> <span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> 
-              <span class="s1">&#39;class_weight&#39;</span><span class="p">:[</span><span class="s1">&#39;balanced&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">],</span> <span class="s1">&#39;random_state&#39;</span><span class="p">:[</span><span class="mi">42</span><span class="p">,</span> <span class="bp">None</span><span class="p">]}</span>
-
+              <span class="s1">&#39;C&#39;</span><span class="p">:[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span>
+              <span class="s1">&#39;class_weight&#39;</span><span class="p">:[</span><span class="s1">&#39;balanced&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">]</span> <span class="p">}</span>
+<span class="c1">#[0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1, 1, 10, 100]</span>
 <span class="c1"># TODO: Initialize the classifier</span>
 <span class="n">clf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">()</span>
 
@@ -1007,7 +1039,7 @@ F1 score for test set: 0.7801.
 <span class="n">f1_scorer</span> <span class="o">=</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">f1_score</span><span class="p">,</span> <span class="n">pos_label</span><span class="o">=</span><span class="s1">&#39;yes&#39;</span><span class="p">)</span>
 
 <span class="c1"># TODO: Perform grid search on the classifier using the f1_scorer as the scoring method</span>
-<span class="n">grid_obj</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">f1_scorer</span><span class="p">)</span>
+<span class="n">grid_obj</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span>  <span class="n">f1_scorer</span><span class="p">)</span>
 
 <span class="c1"># TODO: Fit the grid search object to the training data and find the optimal parameters</span>
 <span class="n">grid_obj</span> <span class="o">=</span> <span class="n">grid_obj</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
@@ -1031,9 +1063,9 @@ F1 score for test set: 0.7801.
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Made predictions in 0.0020 seconds.
-Tuned model has a training F1 score of 0.8481.
-Made predictions in 0.0000 seconds.
-Tuned model has a testing F1 score of 0.8028.
+Tuned model has a training F1 score of 0.8263.
+Made predictions in 0.0010 seconds.
+Tuned model has a testing F1 score of 0.8133.
 </pre>
 </div>
 </div>
@@ -1057,7 +1089,7 @@ Tuned model has a testing F1 score of 0.8028.
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer: </strong> The final model's F1 score for training and testing are 0.8481 and 0.8028, respectively. The training score is less than untuned model (0.8761), the testing score is higher than the untuned model (0.7838).</p>
+<p><strong>Answer: </strong> The final model's F1 score for training and testing are 0.8263 and 0.8133, respectively. They are less than training score (0.8627) and testing score (0.8212) in untuned model.</p>
 <p>In my view, the main reason that causes this situation is the training and testting dataset are so small, which might not reflect the performance of the tuned classifier.</p>
 
 </div>
