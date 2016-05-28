@@ -23,7 +23,7 @@ class LearningAgent(Agent):
         # TODO: Initialize any additional variables here
         self.Q_table = {} # Initialize Q value
         self.alpha = 1 # learning_rate
-        self.gamma = 0.5 # discount factor
+        self.gamma = 0 # discount factor
         self.state_previous = None
         self.action_previous = None
         
@@ -117,7 +117,7 @@ def run():
     # NOTE: You can set enforce_deadline=False while debugging to allow longer trials
 
     # Now simulate it
-    sim = Simulator(e, update_delay=0.002, display=False)  # create simulator (uses pygame when display=True, if available)
+    sim = Simulator(e, update_delay=0.001, display=False)  # create simulator (uses pygame when display=True, if available)
     # NOTE: To speed up simulation, reduce update_delay and/or set display=False
 
     sim.run(n_trials=100)  # run for a specified number of trials
