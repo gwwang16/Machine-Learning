@@ -3,6 +3,7 @@ from environment import Agent, Environment
 from planner import RoutePlanner
 from simulator import Simulator
 from collections import defaultdict
+import matplotlib.pyplot as plt
 
 class LearningAgent(Agent):
     """An agent that learns to drive in the smartcab world."""
@@ -12,19 +13,27 @@ class LearningAgent(Agent):
         self.color = 'red'  # override color
         self.planner = RoutePlanner(self.env, self)  # simple route planner to get next_waypoint
         
+        self.success = 0
+        self.total = 0
+        self.break_rule = []
+        self.break_plan = []
+        self.break_rule_times = 0
+        self.break_plan_times = 0
+
         # TODO: Initialize any additional variables here
         self.Q_table = {} # Initialize Q value
-        self.alpha = 0.3 # learning_rate
+        self.alpha = 1 # learning_rate
         self.gamma = 0.5 # discount factor
         self.state_previous = None
         self.action_previous = None
-        self.actions = [None, 'forward', 'left', 'right'] # avaliable actions
-
+        
     def reset(self, destination=None):
         self.planner.route_to(destination)
         # TODO: Prepare for a new trip; reset any variables here, if required
         self.state_previous
         self.action_previous
+        break_rule_times = 0
+        break_plan_times = 0
 
     def update(self, t):
         # Gather inputs
@@ -33,10 +42,11 @@ class LearningAgent(Agent):
         deadline = self.env.get_deadline(self)
 
         # TODO: Update state
-        self.state = (inputs['light'], inputs['oncoming'], inputs['right'], inputs['left'], self.next_waypoint) # list format for sate, hashable for dict
-
+        #self.state = (inputs['light'], inputs['oncoming'], inputs['right'], inputs['left'], self.next_waypoint) # list format for sate, hashable for dict
+        self.state = (inputs['light'], self.next_waypoint)
+        
         # TODO: Select action according to your policy
-        action = self.Best_Action(self.state, self.actions)
+        action = self.Best_Action(self.state, self.env.valid_actions)
 
         # Execute action and get reward
         reward = self.env.act(self, action)
@@ -49,8 +59,30 @@ class LearningAgent(Agent):
 
         self.state_previous = self.state
         self.action_previous = action
+
         print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
-    
+        
+        # Results statistics
+        if reward == -0.5:
+            self.break_plan_times += 1
+        if reward == -1:
+            self.break_rule_times += 1
+
+        state_finish = False
+        if reward >= 10:
+            self.success += 1
+            state_finish = True
+        if deadline == 0 or reward >= 10:
+            self.total += 1
+            state_finish = True
+            self.break_rule.append(self.break_rule_times)
+            self.break_plan.append(self.break_plan_times)
+        if state_finish:
+            print 'success rate:', self.success, '/', self.total
+            print 'break_plan:', self.break_plan
+            print 'break_rule:', self.break_rule
+            print 'learning rate:', self.alpha,'discount:', self.gamma
+
 
     def Q_values(self, state, action):
         """Get Q_value from Q_table according to (state,action) key"""
@@ -62,7 +94,7 @@ class LearningAgent(Agent):
         """Return best_action with max Q_value according to the current state.
         state: current state
         actions: all avaliable actions."""
-        best_qs = -99999
+        best_qs = -999
         best_action = None
         for action in actions:
             qs = self.Q_values(state, action)
@@ -85,7 +117,7 @@ def run():
     # NOTE: You can set enforce_deadline=False while debugging to allow longer trials
 
     # Now simulate it
-    sim = Simulator(e, update_delay=0.001, display=True)  # create simulator (uses pygame when display=True, if available)
+    sim = Simulator(e, update_delay=0.002, display=False)  # create simulator (uses pygame when display=True, if available)
     # NOTE: To speed up simulation, reduce update_delay and/or set display=False
 
     sim.run(n_trials=100)  # run for a specified number of trials
