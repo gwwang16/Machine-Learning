@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>Smartcab</title>
+<title>Smartcab-report</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -259,9 +259,6 @@ At each time step, process the inputs and update the current state. Run it again
 <p>The states I used are:</p>
 <ul>
 <li>The traffic light <code>light</code>: ['red', 'green']</li>
-<li>The traffic at the coming straight <code>oncoming</code>: [None, 'forward', 'left', 'right']</li>
-<li>The traffic at the coming left <code>left</code>: [None, 'forward', 'left', 'right']</li>
-<li>The traffic at the coming right <code>right</code>: [None, 'forward', 'left', 'right']</li>
 <li>Next waypoint location <code>next_waypoint</code>: [None, 'forward', 'left', 'right']</li>
 </ul>
 <p>The goal of this project is to train the cab can reach the target and obey the traffic rules.</p>
@@ -270,6 +267,7 @@ At each time step, process the inputs and update the current state. Run it again
 <li><code>light</code>: ['red'], the agent can turn right if <code>oncoming</code> state is not ['left'] or <code>left</code> state is not ['forward']. </li>
 <li><code>light</code>: ['green'], the agent can turn left only if <code>oncoming</code> state is not ['forward'] .</li>
 </ul>
+<p>However, when I used all these states, the number of disobeying traffic rules was high. So I reduced the states number,  the <code>light</code> state is used only in the last to learn the traffic rule.</p>
 <p><code>next_waypoint</code> state is the best action calculated by route planner, the agent should obey the action from <code>nex_waypoint</code> as well to reach the target point as soon as possible.</p>
 <p><code>deadline</code> is another state related with the reward. The agent can not get the final reward 10 if it can not reach the target within deadline time. However, this state will affact the performance when I added it into the set of sates.</p>
 
@@ -346,17 +344,115 @@ Each action generates a corresponding numeric reward or penalty (which may be ze
 </ul>
 </li>
 </ul>
-<p>In this project, the learning rate should be chosen as 1 because it fully deterministic environment. The discount factor should be selected a lower value to reduce the influence of high reward at the final target, because the agent can get the the target with <code>net_waypoint</code> action and the destination changed every time.</p>
 <p>When the states only contain <code>light</code> and <code>next_waypoint</code> states:
 The success rate is high and the traffic rule breaking times and planner action breaking times are very low. But when the learning rate less than 1, the success rate is not stable.</p>
 <p>When the states contain all the sates of <code>inputs</code> and <code>next_way_point</code>, the success rate is stable and very high. However, the raffic rule breaking times and planner action breaking times are quite high in the same time.
 <img src="https://raw.githubusercontent.com/wgw0415/Machine-Learning/master/Projects/P4-Smartcab/images/results.jpg" width="400"></p>
 <p>I wonder why the few states contained, the performance is better. So I increased the trail times from 100 to 1000, and found that:</p>
 <ul>
-<li>when the states contained <code>light</code> and <code>next_waypoint</code>, the success rate is still high(999/1000), the traffic rule breaking time is increased rarely (the probability is about 0.3%), the reason is the agent did not know the overall traffic rules, it will only concer the red and green light, but not concern whether there is traffic at the intersection. when I added extra 10 cars on the road, the probability of traffic rules breaking increased to 0.3%~2%.</li>
+<li>when the states contained <code>light</code> and <code>next_waypoint</code>, the success rate is still high(999/1000), the traffic rule breaking time is increased rarely (the probability is about 0.3%), the reason is the agent did not know the overall traffic laws, it only concerns the red and green light, but not concerns whether there is traffic at the intersection. when I added extra 10 cars on the road, the probability of traffic rules breaking increased to 0.3%~2%, and the success rate is very unstale, the lowest success rate is about 30/100 among my trials. With the discount factor increasing, the success rate gets more stable.</li>
 <li>when the states contained all <code>inputs</code> states and <code>next_waypoint</code>, the performance did not improved. The success rate is about 998/1000, The traffic rule and planner action breaking times were high and increased intermittently as well. The reason could be Q-values too widely dispersed due to the high dimensions.</li>
 </ul>
-<p>I selected the <code>light</code> and <code>next_waypoint</code> as states, learning rate is 1. discount factor is 0 in the last.</p>
+<p>In this project, the learning rate should be chosen as 1 because it fully deterministic environment. 
+To verify this conclusion, some experiments are conducted. The discount factor is 0.5, medium values are chosen among 5 trails. 10 extra cars are added in the evironment to make a more obvious difference.</p>
+<table>
+<thead><tr>
+<th style="text-align:center">Learning rate</th>
+<th style="text-align:center">Success rate</th>
+<th style="text-align:center">Disobeying traffic laws</th>
+<th style="text-align:center">Disobeying planner action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0/100</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1654</td>
+</tr>
+<tr>
+<td style="text-align:center">0.2</td>
+<td style="text-align:center">89/100</td>
+<td style="text-align:center">24</td>
+<td style="text-align:center">392</td>
+</tr>
+<tr>
+<td style="text-align:center">0.4</td>
+<td style="text-align:center">40/100</td>
+<td style="text-align:center">10</td>
+<td style="text-align:center">946</td>
+</tr>
+<tr>
+<td style="text-align:center">0.6</td>
+<td style="text-align:center">88/100</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">117</td>
+</tr>
+<tr>
+<td style="text-align:center">0.8</td>
+<td style="text-align:center">98/100</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">12</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">99/100</td>
+<td style="text-align:center">7</td>
+<td style="text-align:center">5</td>
+</tr>
+</tbody>
+</table>
+<p>We can found the performance is getting better with the increasing of learning rate.</p>
+<p>The discount factor should be selected a lower value to reduce the influence of high reward at the final target, because the agent can get the the target with <code>net_waypoint</code> action and the destination changed every time. To verify this conclusion, some experiments are conducted. The learning rate is 1, medium values are chosen among 5 trails. 10 extra cars are added in the evironment to make a more obvious difference.</p>
+<table>
+<thead><tr>
+<th style="text-align:center">Discount factor</th>
+<th style="text-align:center">Success rate</th>
+<th style="text-align:center">Disobeying trafficlaws</th>
+<th style="text-align:center">Disobeying planner action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">56/100</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">6</td>
+</tr>
+<tr>
+<td style="text-align:center">0.2</td>
+<td style="text-align:center">67/100</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">6</td>
+</tr>
+<tr>
+<td style="text-align:center">0.4</td>
+<td style="text-align:center">99/100</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">5</td>
+</tr>
+<tr>
+<td style="text-align:center">0.6</td>
+<td style="text-align:center">100/100</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">7</td>
+</tr>
+<tr>
+<td style="text-align:center">0.8</td>
+<td style="text-align:center">100/100</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">6</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">100/100</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">6</td>
+</tr>
+</tbody>
+</table>
+<p>We can observe that the success rate increased obviously before the discount factor less than 0.4.</p>
+<p>I selected the <code>light</code> and <code>next_waypoint</code> as states, learning rate is 1. discount factor is 0.5 in the last.</p>
 
 </div>
 </div>
@@ -376,9 +472,20 @@ The success rate is high and the traffic rule breaking times and planner action 
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer:</strong> 
-My agent can get close to finding an optimal policy with a high success rate and lower faults number. But there is still few probability to make faults on traffic rules and planner actions  breaking .</p>
-<p>It doed not reach the destination in the minimum possible time, becasue the reward of reaching the target is same if the agent can reach the target before deadline. If we want to get the minimum possible time to reach the destination, it is better to add the relation between reward/penalty and time.</p>
+<p><strong>Answer:</strong></p>
+<ol>
+<li><p>My agent can get close to finding an optimal policy with a high success rate and lower faults number. But there is still few probability to make faults on traffic laws and the shortest path. In this project, the agent will disobeying traffic laws in the following conditions:</p>
+<ul>
+<li>the light: ['red'], the agent turn right when <code>oncoming</code>:['left'] or <code>left</code>：['forward'];</li>
+<li>the <code>light</code>:['green'], the agent turn left when <code>oncoming</code>:['forward']</li>
+</ul>
+<p>The reason is the <code>light</code>:['red', 'green'] state included for traffic laws learning in training state. The agent will make mistake in these specific circumstances .</p>
+</li>
+<li><p>It doed not reach the destination in the minimum possible time, becasue the reward of reaching target is same if the agent can reach the target before deadline. If we want to get the minimum possible time to reach the destination, it is better to add the relation between reward/penalty and time.</p>
+</li>
+<li><p>The agent will fall into a weird trouble in very rare instances. It will stand in the same point for a long time or forever. The reason might be there is no penalty for time spending, one previous target location might have a high q-value for the next time, however the target changed in the next trails. The agent will chose the action with the highest q-value in this state.</p>
+</li>
+</ol>
 
 </div>
 </div>
