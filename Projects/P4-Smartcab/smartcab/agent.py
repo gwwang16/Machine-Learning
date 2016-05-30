@@ -18,6 +18,7 @@ class LearningAgent(Agent):
         self.break_plan = []
         self.break_rule_times = 0
         self.break_plan_times = 0
+        self.moving_steps = 0
         self.decay_rate = 1
 
         # TODO: Initialize any additional variables here
@@ -67,6 +68,7 @@ class LearningAgent(Agent):
             self.break_plan_times += 1
         if reward == -1:
             self.break_rule_times += 1
+        self.moving_steps += 1
 
         state_finish = False
         if reward >= 10:
