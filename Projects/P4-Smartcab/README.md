@@ -19,4 +19,4 @@ In a terminal or command window, navigate to the top-level project directory `sm
 
 This will run the `agent.py` file and execute your agent code.
 
-<img src="https://raw.githubusercontent.com/wgw0415/Machine-Learning/master/Projects/P4-Smartcab/images/pygame-window.jpg" width="200" />
+<img src="https://raw.githubusercontent.com/wgw0415/Machine-Learning/master/Projects/P4-Smartcab/images/pygame-window.jpg" width="400" />
