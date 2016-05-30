@@ -1,5 +1,6 @@
 import time
 import random
+import numpy as np
 from collections import OrderedDict
 
 from simulator import Simulator
@@ -205,8 +206,8 @@ class Environment(object):
                     reward += 10  # bonus
                 self.done = True
                 print "Environment.act(): Primary agent has reached destination!"  # [debug]
-            self.status_text = "State: {}\nAction: {}    Reward: {}  \nSuccess rate: {}/{}\nDisobeying laws ratio: {}/{}  Disobeying shortest ratio: {}/{}".format(agent.get_state(), action, 
-                reward, agent.success, agent.total, agent.break_rule_times, agent.moving_steps, agent.break_plan_times, agent.moving_steps)
+            self.status_text = "State: {}\nAction: {}    Reward: {}  \nSuccess rate: {}/{}    Learning rate: {}\nDisobeying laws rate: {}/{}  Disobeying shortest rate: {}/{}".format(agent.get_state(), action, 
+                reward, agent.success, agent.total, np.around(agent.decay_rate, decimals = 4), agent.break_rule_times, agent.moving_steps, agent.break_plan_times, agent.moving_steps)
             #print "Environment.act() [POST]: location: {}, heading: {}, action: {}, reward: {}".format(location, heading, action, reward)  # [debug]
 
         return reward
