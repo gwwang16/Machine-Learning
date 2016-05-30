@@ -18,6 +18,7 @@ class LearningAgent(Agent):
         self.break_plan = []
         self.break_rule_times = 0
         self.break_plan_times = 0
+        self.decay_rate = 1
 
         # TODO: Initialize any additional variables here
         self.Q_table = {} # Initialize Q value
@@ -53,7 +54,7 @@ class LearningAgent(Agent):
         # TODO: Learn policy based on state, action, reward
         Q_value = self.Q_values(self.state, action)
 
-        self.Q_table[(self.state, action)] = self.Q_values(self.state_previous, self.action_previous) + self.alpha * \
+        self.Q_table[(self.state, action)] = self.Q_values(self.state_previous, self.action_previous) + self.alpha *self.decay_rate* \
                                     (reward + self.gamma * Q_value - self.Q_values(self.state_previous, self.action_previous))
 
         self.state_previous = self.state
@@ -81,8 +82,8 @@ class LearningAgent(Agent):
             print 'break_plan:', self.break_plan
             print 'break_rule:', self.break_rule
             print 'learning rate:', self.alpha,'discount:', self.gamma
-
-
+            self.decay_rate =  1.0 / (1 + float(self.total)/10.0) # set decay_rate with the trails increasing.
+ 
     def Q_values(self, state, action):
         """Get Q_value from Q_table according to (state,action) key"""
         if (state, action) not in self.Q_table:
@@ -103,8 +104,8 @@ class LearningAgent(Agent):
             if self.Q_values(state, action) == best_qs:
                 best_action = action
         return best_action
-               
-
+    
+  
 
 def run():
     """Run the agent for a finite number of trials."""
@@ -116,7 +117,7 @@ def run():
     # NOTE: You can set enforce_deadline=False while debugging to allow longer trials
 
     # Now simulate it
-    sim = Simulator(e, update_delay=0.001, display=False)  # create simulator (uses pygame when display=True, if available)
+    sim = Simulator(e, update_delay=0.2, display=True)  # create simulator (uses pygame when display=True, if available)
     # NOTE: To speed up simulation, reduce update_delay and/or set display=False
 
     sim.run(n_trials=100)  # run for a specified number of trials
