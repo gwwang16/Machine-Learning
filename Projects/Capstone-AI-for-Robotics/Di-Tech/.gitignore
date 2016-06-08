@@ -1,0 +1,14 @@
+./web/data/sessions/*
+*~
+*.dat
+*.o
+*.so
+*.pyc
+*.swp
+*.swo
+.DS_Store
+tmp
+*.txt
+*.py
+*.db
+*.csv
