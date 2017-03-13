@@ -11,8 +11,13 @@ import numpy as np
 import tensorflow as tf
 ## Tools
 import utils
+
 ## Parameters
 import params ## you can modify the content of params.py
+img_height = params.img_height
+img_width = params.img_width
+img_channels = params.img_channels
+
 
 ## Test epoch
 epoch_ids = [10]
@@ -25,15 +30,18 @@ def img_pre_process(img):
     Processes the image and returns it
     :param img: The image to be processed
     :return: Returns the processed image
-    """
-    ## Chop off 1/3 from the top and cut bottom 150px(which contains the head of car)
-    shape = img.shape
-    img = img[int(shape[0]/3):shape[0]-150, 0:shape[1]]
+    """ 
+    # Chop off 1/2 from the top and cut bottom 150px(which contains the head of car)
+    ratio = img_height / img_width
+    h1, h2 = int(img.shape[0]/2),img.shape[0]-150
+    w = (h2-h1) / ratio
+    padding = int(round((img.shape[1] - w) / 2))
+    img = img[h1:h2, padding:-padding]
     ## Resize the image
-    img = cv2.resize(img, (params.FLAGS.img_w, params.FLAGS.img_h), interpolation=cv2.INTER_AREA)
-    ## Return the image sized as a 4D array
-    return np.resize(img, (params.FLAGS.img_w, params.FLAGS.img_h, params.FLAGS.img_c))
-
+    img = cv2.resize(img, (img_width, img_height), interpolation=cv2.INTER_AREA)
+    ## Image Normalization
+    #img = img / 255. 
+    return img
 
 ## Process video
 for epoch_id in epoch_ids:
