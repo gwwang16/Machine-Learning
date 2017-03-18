@@ -365,7 +365,7 @@ def visualize(epoch_id, machine_steering, out_dir, perform_smoothing=False,
         dash_cap.release()
     vw.release()
 
-    mkv_to_mp4(out_path, remove_mkv=True)
+    #mkv_to_mp4(out_path, remove_mkv=True)
 
 
 
