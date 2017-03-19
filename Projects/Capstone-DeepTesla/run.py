@@ -57,7 +57,6 @@ for epoch_id in epoch_ids:
     ############ New codes added by student ############
     frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     cap.release()
-
     # import test data: epoch 10
     imgs_test, wheels_test = preprocess.load_data('test')
     imgs_test = np.array(imgs_test)
@@ -78,7 +77,7 @@ for epoch_id in epoch_ids:
     #    img = img[None,:,:,:]
     #    deg = float(model.predict(img, batch_size=1))
     #    machine_steering.append(deg)
-    
+
     # this line goes wrong, instead with below code
     ############ New codes added by student ############
     machine_steering = model.predict(imgs_test, batch_size=128, verbose=0)
